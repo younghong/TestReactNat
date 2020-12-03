@@ -1,0 +1,56 @@
+// 선택된 아이템 uiComponent
+		_targetComponent = ITEM_TREE.selectedItem.bandUI;
+		
+		// 선택된 아이템이 현재 에디트 페이지에 존재하는지 여부 확인 변수
+		var _hasTarget:Boolean = false;
+		// 선택된 아이템의 클래스 네임을 확인한다.
+		var _targetClassName:String = StringChanger.typeNameChanger(_targetComponent.className);
+		
+		/*
+		선택된 아이템의 노드 타입으로 해당하는 영역의 리스트를 찾는다.
+		cover , data , last  해당 node를 찾는다.
+		*/
+		var _outAC:ArrayCollection;
+		_outAC = OutLineControl.nodeArrayCollection( ITEM_TREE.selectedItem.nodeType  );
+		
+		// 선택된 노드에 현재 페이지가 존재하는지 여부를 확인하는 변수
+		var _hasCurrent:Boolean = false;
+		
+		// 선택된 노드에서 현재 페이지가 존재하는지 찾는다.
+		for each( var _currentPageData:OutlineObject in _outAC){
+			
+			if( currentPage == _currentPageData.ui ){
+				_hasCurrent = true;
+				break;
+			}
+		}
+		
+		// 현재 페이지가 존재 한다면 계속 진행 시킨다.
+		if( _hasCurrent ){
+			
+			var _hasBand:Boolean = false;
+			
+			if( _targetComponent.hasOwnProperty("band_x") ){
+				if( Object(_targetComponent).band != null ){
+					_hasBand = true;
+				}
+			}
+			
+			// 현재 페이지가 존재하는 노드에서 컴포넌트 클래스 명으로 분류된 리스트를 찾는다.
+			for each(var _search:OutlineObject  in _currentPageData.children){
+				
+				if( _hasBand ){
+					if( _search.bandUI != null  ){
+						if( _search.bandUI.id == Object(_targetComponent).band ){
+							_hasTarget = true;
+							break;
+						}
+					}
+				}else{
+					if( _search.bandUI.className == _targetComponent.className ){
+						_hasTarget = true;
+						break;
+					}
+				}
+				
+			}
